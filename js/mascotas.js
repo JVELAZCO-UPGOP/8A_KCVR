@@ -4,17 +4,13 @@ const nombre = document.getElementById('nombre');
 const dueno = document.getElementById('dueno');
 const form = document.getElementById('form');
 const btnGuardar = document.getElementById('btn-guardar');
+const indice = document.getElementById('indice');
 
 let mascotas = [
     {
       tipo: "Gato",
       nombre: "manchas",
       dueno: "Miguel"
-    },
-    {
-      tipo: "Perro",
-      nombre: "Toby",
-      dueno: "Susan"
     }
   ];
 
@@ -32,6 +28,8 @@ let mascotas = [
         </td>
       </tr>`).join("");
       listaMascotas.innerHTML = htmlMascotas;
+      Array.from(document.getElementsByClassName('editar')).forEach((botonEditar, index)=>botonEditar.onclick = editar(index));
+      Array.from(document.getElementsByClassName('eliminar')).forEach((botonEliminar, index)=>botonEliminar.onclick = eliminar(index));
   }
 
   function enviarDatos(evento) {
@@ -41,8 +39,44 @@ let mascotas = [
         nombre: nombre.value,
         dueno: dueno.value
       };
-     mascotas.push(datos);
+      const accion = btnGuardar.innerHTML;
+      switch(accion) {
+        case 'Editar':
+          mascotas[indice.value] = datos;
+          break;
+        default:
+          mascotas.push(datos);
+          break;
+      }
      listarMascotas();
+     resetModal();
+  }
+
+  function editar(index) {
+    return function cuandoCliqueo() {
+      btnGuardar.innerHTML = 'Editar'
+      $('#exampleModalCenter').modal('toggle');
+      const mascota = mascotas[index];
+      nombre.value = mascota.nombre;
+      dueno.value = mascota.dueno;
+      tipo.value = mascota.tipo;
+      indice.value = index;
+    }
+  }
+
+  function resetModal() {
+      nombre.value = '';
+  dueno.value = '';
+  tipo.value = '';
+  indice.value = '';
+  btnGuardar.innerHTML = 'Crear'
+  }
+
+  function eliminar(index){
+    return function clickEnEliminar() {
+        mascotas = mascotas.filter((mascota, indiceMascota)=>indiceMascota !== index);
+        listarMascotas();
+      }
   }
   listarMascotas();
 
