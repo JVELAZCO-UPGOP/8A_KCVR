@@ -4,7 +4,11 @@ const nombre = document.getElementById('nombre');
 const dueno = document.getElementById('dueno');
 const form = document.getElementById('form');
 const btnGuardar = document.getElementById('btn-guardar');
+const btnGuardar2 = document.getElementById('btn-guardar2');
+const btnCerrar = document.getElementById('btn-cerrar');
 const indice = document.getElementById('indice');
+const titulo = document.getElementById('exampleModalCenterTitle');
+const modal = document.getElementById('exampleModalCenter');
 
 let mascotas = [
     {
@@ -53,32 +57,89 @@ let mascotas = [
   }
 
   function editar(index) {
-    return function cuandoCliqueo() {
-      btnGuardar.innerHTML = 'Editar'
+    return function cuandoCliqueoEditar() {
+      btnGuardar.innerHTML = 'Editar';
+      titulo.innerHTML = "Editar Mascota";
       $('#exampleModalCenter').modal('toggle');
       const mascota = mascotas[index];
       nombre.value = mascota.nombre;
       dueno.value = mascota.dueno;
       tipo.value = mascota.tipo;
       indice.value = index;
+
+      $("#btn-cerrar").on("click",function() {
+        nombre.value = '';
+        dueno.value = 'Dueño';
+        tipo.value = 'Tipo animal';
+        indice.value = '';
+        titulo.innerHTML = "Nueva Mascota";
+        btnGuardar.innerHTML = 'Guardar';
+     });
+
+    $("#btn-tachita").on("click",function() {
+        nombre.value = '';
+        dueno.value = 'Dueño';
+        tipo.value = 'Tipo animal';
+        indice.value = '';
+        titulo.innerHTML = "Nueva Mascota";
+        btnGuardar.innerHTML = 'Guardar';
+        });
     }
   }
-
+ 
   function resetModal() {
       nombre.value = '';
-  dueno.value = '';
-  tipo.value = '';
-  indice.value = '';
-  btnGuardar.innerHTML = 'Crear'
+      dueno.value = 'Dueño';
+      tipo.value = 'Tipo animal';
+      indice.value = '';
+      btnGuardar.innerHTML = 'Guardar';
   }
 
   function eliminar(index){
-    return function clickEnEliminar() {
+   
+     return function clickEnEliminar() {
+      $('#exampleModalCenter2').modal('toggle');
+      const mascota = mascotas[index];
+      nombre.value = mascota.nombre;
+      dueno.value = mascota.dueno;
+      tipo.value = mascota.tipo;
+      indice.value = index;
+
+      $("#btn-eliminar2").on("click",function() {
         mascotas = mascotas.filter((mascota, indiceMascota)=>indiceMascota !== index);
         listarMascotas();
+        nombre.value = '';
+        dueno.value = 'Dueño';
+        tipo.value = 'Tipo animal';
+        indice.value = '';
+        titulo.innerHTML = "Nueva Mascota";
+        });
+
+        $("#btn-cerrar2").on("click",function() {
+          nombre.value = '';
+          dueno.value = 'Dueño';
+          tipo.value = 'Tipo animal';
+          indice.value = index;
+          titulo.innerHTML = "Nueva Mascota";
+          btnGuardar.innerHTML = 'Guardar';
+          });
+
+          $("#btn-tachita2").on("click",function() {
+            nombre.value = '';
+            dueno.value = 'Dueño';
+            tipo.value = 'Tipo animal';
+            indice.value = '';
+            titulo.innerHTML = "Nueva Mascota";
+            btnGuardar.innerHTML = 'Guardar';
+            });
+          
       }
   }
+    
+  
   listarMascotas();
+  
 
+ 
   form.onsubmit = enviarDatos;
   btnGuardar.onclick = enviarDatos;

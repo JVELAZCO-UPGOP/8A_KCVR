@@ -6,6 +6,8 @@ const apellido = document.getElementById('apellido');
 const form = document.getElementById('form');
 const btnGuardar = document.getElementById('btn-guardar');
 const indice = document.getElementById('indice');
+const titulo = document.getElementById('exampleModalCenterTitle');
+const modal = document.getElementById('exampleModalCenter');
 
 let duenos = [
     {
@@ -60,6 +62,7 @@ let duenos = [
   function editar(index) {
     return function cuandoCliqueo() {
       btnGuardar.innerHTML = 'Editar'
+      titulo.innerHTML = "Editar Dueño"
       $('#exampleModalCenter').modal('toggle');
       const dueno = duenos[index];
       indice.value = index;
@@ -67,6 +70,27 @@ let duenos = [
       apellido.value = dueno.apellido;
       pais.value = dueno.pais;
       identificacion.value = dueno.identificacion;
+
+
+      $("#btn-cerrar").on("click",function() {
+        indice.value = '';
+        nombre.value = '';
+        apellido.value = '';
+        pais.value = 'País';
+        identificacion.value = '';
+        btnGuardar.innerHTML = 'Crear'
+        titulo.innerHTML = "Nuevo Dueño";
+     });
+
+    $("#btn-tachita").on("click",function() {
+      indice.value = '';
+      nombre.value = '';
+      apellido.value = '';
+      pais.value = 'País';
+      identificacion.value = '';
+      btnGuardar.innerHTML = 'Crear'
+        titulo.innerHTML = "Nuevo Dueño";
+        });
     }
   }
   
@@ -74,17 +98,56 @@ let duenos = [
     indice.value = '';
     nombre.value = '';
     apellido.value = '';
-    pais.value = '';
+    pais.value = 'País';
     identificacion.value = '';
     btnGuardar.innerHTML = 'Crear'
   }
   
   function eliminar(index) {
+   
     return function clickEnEliminar() {
-      duenos = duenos.filter((dueno, indiceDueno)=>indiceDueno !== index);
-      listarDuenos();
-    }
-  }
+      $('#exampleModalCenter2').modal('toggle');
+      const dueno = duenos[index];
+      indice.value = index;
+      nombre.value = dueno.nombre;
+      apellido.value = dueno.apellido;
+      pais.value = dueno.pais;
+      identificacion.value = dueno.identificacion;
+
+      $("#btn-eliminar2").on("click",function() {
+        duenos = duenos.filter((dueno, indice)=>indice !== index);
+        listarDuenos();
+        indice.value = '';
+        nombre.value = '';
+        apellido.value = '';
+        pais.value = 'País';
+        identificacion.value = '';
+        titulo.innerHTML = "Nuevo Dueño";
+        btnGuardar.innerHTML = 'Guardar';
+        });
+
+        $("#btn-cerrar2").on("click",function() {
+           indice.value = '';
+           nombre.value = '';
+           apellido.value = '';
+           pais.value = 'País';
+           identificacion.value = '';
+          titulo.innerHTML = "Nuevo Dueño";
+          btnGuardar.innerHTML = 'Guardar';
+          });
+
+          $("#btn-tachita2").on("click",function() {
+            indice.value = '';
+            nombre.value = '';
+            apellido.value = '';
+            pais.value = 'País';
+            identificacion.value = '';
+            btnGuardar.innerHTML = 'Crear'
+              titulo.innerHTML = "Nuevo Dueño";
+              });
+          }
+      }
+    
   
   listarDuenos();
   

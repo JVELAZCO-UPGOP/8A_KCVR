@@ -6,6 +6,8 @@ const apellido = document.getElementById('apellido');
 const form = document.getElementById('form');
 const btnGuardar = document.getElementById('btn-guardar');
 const indice = document.getElementById('indice');
+const titulo = document.getElementById('exampleModalCenterTitle');
+const modal = document.getElementById('exampleModalCenter');
 
 let veterinarias = [
     {
@@ -66,6 +68,7 @@ let veterinarias = [
   function editar(index) {
     return function cuandoCliqueo() {
       btnGuardar.innerHTML = 'Editar'
+      titulo.innerHTML = "Editar Veterinaria";
       $('#exampleModalCenter').modal('toggle');
       const veterinaria = veterinarias[index];
       indice.value = index;
@@ -73,23 +76,84 @@ let veterinarias = [
       apellido.value = veterinaria.apellido;
       pais.value = veterinaria.pais;
       identificacion.value = veterinaria.identificacion;
+
+      $("#btn-cerrar").on("click",function() {
+        indice.value = '';
+        nombre.value = '';
+        apellido.value = '';
+        pais.value = 'País';
+        identificacion.value = '';
+        btnGuardar.innerHTML = 'Crear'
+        titulo.innerHTML = "Nueva Veterinaria";
+     });
+
+    $("#btn-tachita").on("click",function() {
+      indice.value = '';
+      nombre.value = '';
+      apellido.value = '';
+      pais.value = 'País';
+      identificacion.value = '';
+      btnGuardar.innerHTML = 'Crear'
+      titulo.innerHTML = "Nueva Veterinaria";
+        });
+
     }
+
   }
   
   function resetModal() {
     indice.value = '';
     nombre.value = '';
     apellido.value = '';
-    pais.value = '';
+    pais.value = 'pais';
     identificacion.value = '';
     btnGuardar.innerHTML = 'Crear'
   }
   
   function eliminar(index) {
+
     return function clickEnEliminar() {
-      veterinarias = veterinarias.filter((veterinaria, indiceVeterinaria)=>indiceVeterinaria !== index);
-      listarVeterinarias();
-    }
+      $('#exampleModalCenter2').modal('toggle');
+      const veterinaria = veterinarias[index];
+      indice.value = index;
+      nombre.value = veterinaria.nombre;
+      apellido.value = veterinaria.apellido;
+      pais.value = veterinaria.pais;
+      identificacion.value = veterinaria.identificacion;
+
+      $("#btn-eliminar2").on("click",function() {
+        veterinarias = veterinarias.filter((veterinaria, indice)=>indice !== index);
+        listarVeterinarias();
+        indice.value = '';
+        nombre.value = '';
+        apellido.value = '';
+        pais.value = 'País';
+        identificacion.value = '';
+        btnGuardar.innerHTML = 'Crear'
+        titulo.innerHTML = "Nueva Veterinaria";
+        });
+
+        $("#btn-cerrar2").on("click",function() {
+          indice.value = '';
+          nombre.value = '';
+          apellido.value = '';
+          pais.value = 'País';
+          identificacion.value = '';
+          btnGuardar.innerHTML = 'Crear'
+          titulo.innerHTML = "Nueva Veterinaria";
+          });
+
+          $("#btn-tachita2").on("click",function() {
+            indice.value = '';
+        nombre.value = '';
+        apellido.value = '';
+        pais.value = 'País';
+        identificacion.value = '';
+        btnGuardar.innerHTML = 'Crear'
+        titulo.innerHTML = "Nueva Veterinaria";
+              });
+          
+      }
   }
   
   listarVeterinarias();
