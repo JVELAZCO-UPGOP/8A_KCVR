@@ -1,6 +1,16 @@
-const http = require('http');
-const url = require('url');
-const StringDecoder = require('string_decoder').StringDecoder;
+const http = require("http");
+const url = require("url");
+const StringDecoder = require("string_decoder").StringDecoder;
+
+let recursos = {
+  mascotas: [
+    { tipo: "perro", nombre: "Bella", dueno: "Karen" },
+    { tipo: "perro", nombre: "Bella", dueno: "Karen" },
+    { tipo: "perro", nombre: "Bella", dueno: "Karen" },
+    { tipo: "perro", nombre: "Bella", dueno: "Karen" },
+    { tipo: "perro", nombre: "Bella", dueno: "Karen" },
+  ],
+};
 
   const callbackDelServidor = (req, res) => {
    //obtener url desde el objeto request 
@@ -10,15 +20,8 @@ const StringDecoder = require('string_decoder').StringDecoder;
   //obtener la ruta
   const ruta = urlParseada.pathname;
 
-  //Enviar una respuesta dependiendo de la ruta que se le asigne
-  if(ruta === '/ruta') {
-    res.end('Esta es /ruta');
-  } else {
-    res.end('Esta en una ruta que no conozco')
-  }
-
-  //Quitar el slash
-  const rutaLimpia = ruta.replace(/^\/+|\/+$/g, '');
+   //Quitar el slash
+  const rutaLimpia = ruta.replace(/^\/+|\/+$/g, "");
 
   //Obtener el método http
   const metodo =  req.method.toLowerCase();
@@ -30,16 +33,16 @@ const StringDecoder = require('string_decoder').StringDecoder;
   const { headers = {} } = req;
 
   //Obtener el payload
-  const decoder = new StringDecoder('utf-8');
-  let buffer = '';
+  const decoder = new StringDecoder("utf-8");
+  let buffer = "";
 
   //Ir acumulando la data cuando el request reciba un payload
-  req.on('data', (data)=>{
+  req.on("data", (data) => {
     buffer += decoder.write(data);
   });
 
-  //Se termina de acumular los datos y decirle al decoder que finalice
-  req.on('end', ()=>{
+  //Termina de acumular los datos y decirle al decoder que finalice
+  req.on("end", () => {
     buffer += decoder.end();
 
     //Ordenar la data 
@@ -48,21 +51,22 @@ const StringDecoder = require('string_decoder').StringDecoder;
       query,
       metodo,
       headers,
-      payload: buffer
+      payload: buffer,
     };
 
     //Elegir el manejador dependiendo de la ruta  //(handler) y asignarle función que el enrutador tiene 
     let handler;
-    if(rutaLimpia && enrutador[rutaLimpia]) {
+    if (rutaLimpia && enrutador[rutaLimpia]) {
       handler = enrutador[rutaLimpia];
     } else {
       handler = enrutador.noEncontrado;
     }
 
     //Ejecutar handler (manejador) para enviar respuesta
-    if(typeof handler === 'function') {
-      handler(data, (statusCode = 200, mensaje)=>{
+    if(typeof handler === "function") {
+      handler(data, (statusCode = 200, mensaje) => {
         const respuesta = JSON.stringify(mensaje);
+        res.setHeader("Content-Type", "application/json");
         res.writeHead(statusCode);
         // linea donde se responde a la aplicación cliente
         res.end(respuesta);
@@ -72,20 +76,20 @@ const StringDecoder = require('string_decoder').StringDecoder;
   });
 };
 
-const enrutador = {
+const enrutador = {  
   ruta: (data, callback) => {
-    callback(200, {mensaje: 'Esta es /ruta'});
-  },
-  usuarios: (data, callback) => {
-    callback(200, [{nombre: 'usuario 1'},{nombre: 'usuario 2'}]);
+    callback(200, {mensaje: "Estas es /ruta"});
+  }, 
+  mascotas: (data, callback) => {
+    callback(200, recursos.mascotas);
   },
   noEncontrado: (data, callback) => {
-    callback(404, {mensaje: 'No encontrado'});
-  }
+    callback(404, {mensaje: "Ruta No encontrada"});
+  },
 }
 
 const server = http.createServer(callbackDelServidor);
 
-server.listen(5000, ()=>{
-  console.log('El servidor esta escuchando peticiones en http://localhost:5000/');
+server.listen(5000, () => {
+  console.log("El servidor esta escuchando peticiones en http://localhost:5000/");
 });
