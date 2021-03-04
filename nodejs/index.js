@@ -45,6 +45,10 @@ let recursos = {
   req.on("end", () => {
     buffer += decoder.end();
 
+    if (headers["content-type"] === "application/json") {
+      buffer = JSON.parse(buffer);
+    }
+
     //Ordenar la data 
     const data = {
       ruta: rutaLimpia,
@@ -56,8 +60,8 @@ let recursos = {
 
     //Elegir el manejador dependiendo de la ruta  //(handler) y asignarle función que el enrutador tiene 
     let handler;
-    if (rutaLimpia && enrutador[rutaLimpia]) {
-      handler = enrutador[rutaLimpia];
+    if (rutaLimpia && enrutador[rutaLimpia] && enrutador[rutaLimpia][metodo]) {
+      handler = enrutador[rutaLimpia][metodo];
     } else {
       handler = enrutador.noEncontrado;
     }
@@ -79,9 +83,15 @@ let recursos = {
 const enrutador = {  
   ruta: (data, callback) => {
     callback(200, {mensaje: "Estas es /ruta"});
-  }, 
-  mascotas: (data, callback) => {
-    callback(200, recursos.mascotas);
+  },
+  mascotas: {
+    get: (data, callback) => {
+      callback(200, recursos.mascotas);
+    },
+    post: (data, callback) => {
+      recursos.mascotas.push(data.payload);
+      callback(201, data.payload);
+    },
   },
   noEncontrado: (data, callback) => {
     callback(404, {mensaje: "Ruta No encontrada"});
