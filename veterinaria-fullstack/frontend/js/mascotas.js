@@ -10,16 +10,17 @@ const indice = document.getElementById('indice');
 const titulo = document.getElementById('exampleModalCenterTitle');
 const modal = document.getElementById('exampleModalCenter');
 
-let mascotas = [
-    {
-      tipo: "Gato",
-      nombre: "manchas",
-      dueno: "Miguel"
+let mascotas = [];
+async function listarMascotas() {
+  try {
+    const respuesta = await fetch("http://localhost:5000/mascotas");
+    const mascotasDelServer = await respuesta.json();
+    if (Array.isArray(mascotasDelServer) && mascotasDelServer.length > 0) {
+      mascotas = mascotasDelServer;
     }
-  ];
-
-  function listarMascotas() {
-    const htmlMascotas = mascotas.map((mascota, index)=>`<tr>
+    const htmlMascotas = mascotas
+      .map(
+        (mascota, index) => `<tr>
         <th scope="row">${index}</th>
         <td>${mascota.tipo}</td>
         <td>${mascota.nombre}</td>
@@ -30,10 +31,19 @@ let mascotas = [
                 <button type="button" class="btn btn-danger eliminar"><i class="far fa-trash-alt"></i></button>
             </div>
         </td>
-      </tr>`).join("");
-      listaMascotas.innerHTML = htmlMascotas;
-      Array.from(document.getElementsByClassName('editar')).forEach((botonEditar, index)=>botonEditar.onclick = editar(index));
-      Array.from(document.getElementsByClassName('eliminar')).forEach((botonEliminar, index)=>botonEliminar.onclick = eliminar(index));
+        </tr>`
+        )
+        .join("");
+        listaMascotas.innerHTML = htmlMascotas;
+        Array.from(document.getElementsByClassName("editar")).forEach(
+          (botonEditar, index) => (botonEditar.onclick = editar(index))
+        );
+        Array.from(document.getElementsByClassName("eliminar")).forEach(
+          (botonEliminar, index) => (botonEliminar.onclick = eliminar(index))
+        );
+      } catch (error) {
+        throw error;
+      }
   }
 
   function enviarDatos(evento) {
@@ -106,7 +116,9 @@ let mascotas = [
       indice.value = index;
 
       $("#btn-eliminar2").on("click",function() {
-        mascotas = mascotas.filter((mascota, indiceMascota)=>indiceMascota !== index);
+        mascotas = mascotas.filter(
+          (mascota, indiceMascota) => indiceMascota !== index
+        );
         listarMascotas();
         nombre.value = '';
         dueno.value = 'Dueño';
@@ -139,7 +151,5 @@ let mascotas = [
   
   listarMascotas();
   
-
- 
   form.onsubmit = enviarDatos;
   btnGuardar.onclick = enviarDatos;
