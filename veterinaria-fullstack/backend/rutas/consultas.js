@@ -1,14 +1,26 @@
-module.exports = function consultasHandler(consultas){
+module.exports = function consultasHandler({
+  consultas,
+  veterinarias,
+  mascotas,
+}) {
     return   {
     get: (data, callback) => {
       if (typeof data.indice !== "undefined") {
-        console.log("handler dueños", { data });
+        console.log("handler consultas", { data });
         if (consultas[data.indice]) {
           return callback(200, consultas[data.indice]);
         }
-        return callback(404, {mensaje: "La consulta con indice ${data.indice} no encontrada",});
+        return callback(404, {mensaje: "La consulta con indice ${data.indice} no es encontrada",});
       }
-      callback(200, consultas);
+      const consultasRelacionada = consultas.map((consulta) => ({
+        ...consulta,
+        mascota: { ...mascotas[consulta.mascota], id: consulta.mascota },
+        veterinaria: {
+          ...veterinarias[consulta.veterinaria],
+          id: consulta.veterinaria,
+        },
+      }));
+      callback(200, consultasRelacionada);
     },
     post: (data, callback) => {
         let nuevaConsulta = data.payload;
@@ -20,7 +32,6 @@ module.exports = function consultasHandler(consultas){
       put: (data, callback) => {
         if (typeof data.indice !== "undefined") {
           if (consultas[data.indice]) {
-            consultas[data.indice] = data.payload;
             const { fechaCreacion } = consultas[data.indice];
             consultas[data.indice] = {
               ...data.payload,

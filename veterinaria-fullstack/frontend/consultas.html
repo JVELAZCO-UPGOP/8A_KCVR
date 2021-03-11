@@ -7,7 +7,11 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link rel ="stylesheet" href="css/styles.css">
+    <link rel ="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/v4-shims.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
     <title>Hello, world!</title>
   </head>
   <body>
@@ -45,97 +49,82 @@
           <div class="actions-menu">
             <h1>Consultas</h1>
            <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Nueva
-</button>
+           <div class="actions-menu-content">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                Nueva
+            </button>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Oops!</strong> Error. Por favor vuelve a intentarlo.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
           </div>
         
         <table class="table table-stripped table-hover">
             <thead class="table-dark">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Mascota</th>
+                    <th scope="col">Veterinaria</th>
+                    <th scope="col">Diagnostico</th>
+                    <th scope="col">Creacion</th>
+                    <th scope="col">Editado</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td> 
-                      <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-info">Editar</button>
-                        <button type="button" class="btn btn-danger">Eliminar</button>
-                      </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td> 
-                      <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-info">Editar</button>
-                        <button type="button" class="btn btn-danger">Eliminar</button>
-                      </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td> 
-                      <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-info">Editar</button>
-                        <button type="button" class="btn btn-danger">Eliminar</button>
-                      </div>
-                    </td>
-                </tr>
-            </tbody>
+          <tbody id="lista-consultas">
+        </tbody>
         </table>
       </div>
 
       <!-- Modal -->
-<div class="modal fade" data-backdrop="static" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Nueva Mascota</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="exampleModalLabel">Nueva Consulta</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" id="btn-tachita"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form id="formulario">
+          <input type="hidden" id="indice" />
           <div class="form-row">
             <div class="col">
-              <select class="form-control" id="exampleFormControlSelect1">
-                <option>Tipo animal</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+              <select class="form-control" id="mascota">
+                <option>Seleccione Mascota</option>
               </select>
           </div>
           </div>
-          <div class ="row">
+          <div class="form-row">
             <div class="col">
-              <input type="text" class="form-control" placeholder="First name">
+                <select class="form-control" id="veterinaria">
+                  <option>Seleccione Veterinario(a)</option>
+                </select>
             </div>
+        </div>
+          <div class ="form-row">
             <div class="col">
-              <input type="text" class="form-control" placeholder="Last name">
+              <textarea id="historia" class="form-control" placeholder="Historia"></textarea>
             </div>
           </div>
+          <div class="form-row">
+            <div class="col">
+                <select class="form-control" id="diagnostico" placeholder="Diagnostico">
+                  <option>Seleccionar Diagnostico</option>
+                  <option>Sarna</option>
+                  <option>Moquillo</option>
+                  <option>Parvovirosis</option>
+                  <option>Úlcera corneal</option>
+                </select>
+            </div>
+        </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn-cerrar">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="btn-guardar">Crear</button>
       </div>
     </div>
   </div>
@@ -143,13 +132,11 @@
 
     <!-- Optional JavaScript; choose one of the two! -->
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
-    -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"  crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+    <script src="./js/consultas.js"></script>
+   
   </body>
 </html>
