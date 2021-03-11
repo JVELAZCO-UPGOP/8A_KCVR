@@ -48,7 +48,7 @@ const entidad = "consultas";
     }
   } catch (error) {
     console.log({ error });
-    $(".alert").show();
+    $(".alert-danger").show();
   }
 }
 
@@ -71,7 +71,7 @@ async function listarMascotas() {
       }
     } catch (error) {
         console.log({ error });
-        $(".alert").show();
+        $(".alert-danger").show();
     }
   }
   
@@ -94,7 +94,7 @@ async function listarMascotas() {
       }
     } catch (error) {
         console.log({ error });
-        $(".alert").show();
+        $(".alert-danger").show();
     }
   }
   
@@ -171,20 +171,23 @@ async function listarMascotas() {
         }
         return;
       }
-      alert("Error. Formulario incompleto.");
+        $(".alert-warning").show();
     } catch (error) {
         console.log({ error });
-        $(".alert").show();
+        $(".alert-danger").show();
     }
   }
   
   function resetModal() {
-    indice.value = "";
     btnGuardar.innerHTML = "Crear";
-    mascota.value = "Seleccione mascota";
-    veterinaria.value = "Seleccione veterinario(a)";
-    historia.value = "";
-    diagnostico.value = "Seleccionar Diagnostico";
+    [indice, mascota, veterinaria, historia, diagnostico].forEach(
+      (inputActual) => {
+        inputActual.value = "";
+        inputActual.classList.remove("is-invalid");
+        inputActual.classList.remove("is-valid");
+      }
+    );
+    $(".alert-warning").hide();
     $("#exampleModalCenter").modal("toggle");
     titulo.innerHTML = "Nueva Consulta";
   }
@@ -192,10 +195,18 @@ async function listarMascotas() {
 
   function validar(datos) {
     if (typeof datos !== "object") return false;
+    let respuesta = true;
     for (let llave in datos) {
-      if (datos[llave].length === 0) return false;
+      if (datos[llave].length === 0) {
+        document.getElementById(llave).classList.add("is-invalid");
+        respuesta = false;
+      } else {
+        document.getElementById(llave).classList.remove("is-invalid");
+        document.getElementById(llave).classList.add("is-valid");
+      }
     }
-    return true;
+    if (respuesta === true) $(".alert-warning").hide();
+    return respuesta;
   }
 
   btnGuardar.onclick = enviarDatos;

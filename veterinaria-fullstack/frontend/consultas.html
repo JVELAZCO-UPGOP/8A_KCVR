@@ -85,22 +85,28 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Nueva Consulta</h5>
+        <div class="alert alert-warning alert-dismissible" role="alert">
+          Error. Hay campos faltantes.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" id="btn-tachita"></button>
       </div>
       <div class="modal-body">
-        <form id="formulario">
+        <form class="needs-validation" id="formulario">
           <input type="hidden" id="indice" />
           <div class="form-row">
             <div class="col">
               <select class="form-control" id="mascota">
-                <option>Seleccione Mascota</option>
+                <option value="" >Seleccione Mascota</option>
               </select>
           </div>
           </div>
           <div class="form-row">
             <div class="col">
                 <select class="form-control" id="veterinaria">
-                  <option>Seleccione Veterinario(a)</option>
+                  <option value="" >Seleccione Veterinario(a)</option>
                 </select>
             </div>
         </div>
@@ -112,7 +118,7 @@
           <div class="form-row">
             <div class="col">
                 <select class="form-control" id="diagnostico" placeholder="Diagnostico">
-                  <option>Seleccionar Diagnostico</option>
+                  <option value="" >Seleccionar Diagnostico</option>
                   <option>Sarna</option>
                   <option>Moquillo</option>
                   <option>Parvovirosis</option>
