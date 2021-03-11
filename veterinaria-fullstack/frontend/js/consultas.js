@@ -7,7 +7,7 @@ const indice = document.getElementById("indice");
 const btnGuardar = document.getElementById("btn-guardar");
 const titulo = document.getElementById('exampleModalLabel');
 const formulario = document.getElementById("formulario");
-const url = "http://localhost:5000";
+const url = "https://veterinaria-backend-sable.vercel.app";
 
 let consultas = [];
 let mascotas= [];

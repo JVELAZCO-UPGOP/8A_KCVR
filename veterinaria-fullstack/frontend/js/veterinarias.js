@@ -7,7 +7,7 @@ const btnGuardar = document.getElementById('btn-guardar');
 const indice = document.getElementById('indice');
 const titulo = document.getElementById('exampleModalCenterTitle');
 const modal = document.getElementById('exampleModalCenter');
-const url = "http://localhost:5000/veterinarias";
+const url = "https://veterinaria-backend-sable.vercel.app/veterinarias";
 let veterinarias = [];
 
 async function listarVeterinarias() {
