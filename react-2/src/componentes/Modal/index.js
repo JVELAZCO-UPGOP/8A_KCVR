@@ -1,66 +1,55 @@
 import React from "react";
 import ModalHeader from "./ModalHeader";
 import Select from "../Select";
+import "./Modal.css";
+import Input from "../Input";
+import ModalFooter from "./ModalFooter";
 
-function Modal() {
+const tiposMascota = [
+  { valor: "Perro", etiqueta: "Perro" },
+  { valor: "Gato", etiqueta: "Gato" },
+  { valor: "Pájaro", etiqueta: "Pájaro" },
+  { valor: "Otro", etiqueta: "Otro" },
+];
+
+const duenos = [
+  { valor: "Miguel", etiqueta: "Miguel" },
+  { valor: "Susan", etiqueta: "Susan" },
+  { valor: "Mario", etiqueta: "Mario" },
+  { valor: "Jose", etiqueta: "Jose" },
+  { valor: "Karen", etiqueta: "Karen" },
+];
+
+function Modal({ cambiarModal = () => {} }) {
   return (
-    <div
-      className="modal fade"
-      id="exampleModalCenter"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalCenterTitle"
-      aria-hidden="true"
-    >
-      <div className="modal-dialog modal-dialog-centered" role="document">
-        <div className="modal-content">
-          <ModalHeader />
-          <div className="modal-body">
-            <form id="form">
-              <Select />
-              <div className="form-row">
-                <div className="col">
-                  <input
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    className="form-control"
-                    placeholder="Nombre"
-                  />
-                </div>
-                <div className="col">
-                  <select className="form-control" id="dueno">
-                    <option>Dueño</option>
-                    <option>Miguel</option>
-                    <option>Susan</option>
-                    <option>Mario</option>
-                    <option>Jose</option>
-                    <option>Karen</option>
-                  </select>
-                </div>
-              </div>
-            </form>
+    <>
+    <div className="modal">
+    <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-content">
+      <ModalHeader cambiarModal={cambiarModal} />
+        <div className="modal-body">
+          <form id="form">
+          <div className="form-row">
+                  <div className="col">
+                    <Select options={tiposMascota} nombreCampo="Tipo animal" />
+                  </div>
           </div>
-          <div className="modal-footer">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Cerrar
-            </button>
-            <button
-              type="button"
-              className="btn btn-primary"
-              data-dismiss="modal"
-              id="btn-guardar"
-            >
-              Guardar
-            </button>
+            <div className="form-row">
+              <div className="col">
+              <Input tipo="text" nombreCampo="nombre" />
+              </div>
+              <div className="col">
+              <Select options={duenos} nombreCampo="dueño" />
+              </div>
+            </div>
+            </form>
+            </div>
+            <ModalFooter cambiarModal={cambiarModal} />
           </div>
         </div>
-      </div>
     </div>
+      <div class="modal-backdrop fade show"></div>
+    </>
   );
 }
 

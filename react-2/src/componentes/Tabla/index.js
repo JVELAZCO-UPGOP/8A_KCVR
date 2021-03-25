@@ -5,7 +5,7 @@ import "./Tabla.css";
 import "./Encabezado.css";
 
 function Tabla() {
-  const [mascotas, setMascotas] = useState([
+  const [mascotas] = useState([
     {
       tipo: "Gato",
       nombre: "Chispitas",
@@ -23,7 +23,7 @@ function Tabla() {
        <Encabezado columnas={columnas} />
       <tbody id="lista-mascotas">
       {mascotas.map((mascota, index) => (
-      <Fila index={index} mascota={mascota} />
+       <Fila key={`fila-${index}`} index={index} mascota={mascota} />
       ))}
       </tbody>
     </table>
