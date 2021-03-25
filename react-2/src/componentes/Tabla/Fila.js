@@ -1,4 +1,6 @@
 import React from "react";
+import BotonAccion from "../BotonAccion";
+import "./Fila.css";
 
 function Fila({ index, mascota }) {
   return (
@@ -9,12 +11,9 @@ function Fila({ index, mascota }) {
       <td>{mascota.dueno}</td>
       <td>
         <div className="btn-group" role="group" aria-label="Basic example">
-          <button type="button" className="btn btn-info editar">
-            <i class="fas fa-edit"></i>
-          </button>
-          <button type="button" className="btn btn-danger eliminar">
-            <i className="far fa-trash-alt"></i>
-          </button>
+          <BotonAccion tipo="editar" />
+          <BotonAccion tipo="eliminar" />
+          
         </div>
       </td>
     </tr>
