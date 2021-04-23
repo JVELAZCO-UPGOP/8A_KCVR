@@ -10,7 +10,7 @@ function Nav() {
         Veterinaria KVR
       </a>
      
-      <div className="collapse navbar-collapse" id="navbarColor03">
+      <div className="navbar-right" id="navbarColor03">
         <ul className="navbar-nav mr-auto">
           <li className="nav-item active">
             <a className="nav-link" href="/index.html">
