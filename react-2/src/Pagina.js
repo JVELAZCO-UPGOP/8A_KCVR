@@ -24,6 +24,9 @@ const opcionesIniciales = {
     { valor: "Trauma cefálico", etiqueta: "Trauma cefálico" },
     { valor: "Parvovirosis", etiqueta: "Parvovirosis" },
   ],
+  mascota: [],
+  veterinaria: [],
+  dueno: [],
 };
 class Pagina extends Component {
   constructor(props) {
@@ -38,8 +41,14 @@ class Pagina extends Component {
       options: opcionesIniciales,
     };
   }
-  cambiarModal = (_evento, method = "POST") => {
-    this.setState({ mostraModal: !this.state.mostraModal, method });
+  cambiarModal = (_evento, method = "POST", newState = {}) => {
+    const _newState = {
+      ...newState,
+      mostraModal: !this.state.mostraModal,
+      method,
+     
+    };
+    this.obtenerOpcionesBackend(_newState);
   };
   listar = async () => {
     const { entidad } = this.props;
@@ -63,16 +72,13 @@ class Pagina extends Component {
     let { objeto, method, idObjeto } = this.state;
     await crearEditarEntidad({ entidad, objeto, method, idObjeto });
     this.cambiarModal();
-    this.listar();
   };
-  editarEntidad = async (_evento, index) => {
-    const { entidad } = this.props;
+  obtenerOpcionesBackend = async (newState) => {
     const { options } = this.state;
-    const objeto = await obtenerUno({ entidad, idObjeto: index });
     const mascotasPromise = listarEntidad({ entidad: "mascotas" });
     const veterinariasPromise = listarEntidad({ entidad: "veterinarias" });
     const duenosPromise = listarEntidad({ entidad: "duenos" });
-    let [mascota, veterinaria, dueno] = await Promise.all([
+    let [mascota = [], veterinaria = [], dueno = []] = await Promise.all([
       mascotasPromise,
       veterinariasPromise,
       duenosPromise,
@@ -90,14 +96,20 @@ class Pagina extends Component {
       etiqueta: `${_dueno.nombre} ${_dueno.apellido}`,
     }));
     const nuevasOpciones = { ...options, mascota, veterinaria, dueno };
-    this.setState({ objeto, idObjeto: index, options: nuevasOpciones }, () => {
-      this.cambiarModal(null, "PUT");
+    this.setState({ ...newState, options: nuevasOpciones }, () => {
+      this.listar();
     });
+  };
+
+  editarEntidad = async (_evento, index) => {
+    const { entidad } = this.props;
+    const objeto = await obtenerUno({ entidad, idObjeto: index });
+    const newState = { objeto, idObjeto: index };
+    this.cambiarModal(null, "PUT", newState);
   };
   eliminarEntidad = async (_evento, index) => {
     const { entidad } = this.props;
     const respuesta = await eliminarEntidad({ entidad, idObjeto: index });
-    console.log({ respuesta });
     this.listar();
   };
   componentDidMount() {
@@ -108,7 +120,7 @@ class Pagina extends Component {
   render() {
     const { titulo = "Página sin título", entidad } = this.props;
     const { columnas, idObjeto, entidades, objeto, options } = this.state;
-    console.log({ titulo, columnas });
+    
     return (
       <>
         

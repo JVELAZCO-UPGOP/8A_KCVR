@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ModalHeader from "./ModalHeader";
 import ModalFooter from "./ModalFooter";
 import "./Modal.css";
@@ -6,9 +6,7 @@ import "./Modal.css";
 function Modal({
   cambiarModal = () => {},
   crearEntidad = () => {},
-  children = [],
-  idObjeto = null,
-  entidad = null,
+  children = []
 }) {
   return (
     <>
