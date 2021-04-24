@@ -1,4 +1,4 @@
-const API_URL = "https://veterinaria-backend-karenvielma29.vercel.app/mascotas";
+const API_URL = "https://veterinaria-backend-sable.vercel.app";
 
 export const listarEntidad = async ({ entidad = "mascotas" }) => {
   try {
@@ -16,7 +16,6 @@ export const crearEditarEntidad = async ({
     method = "POST",
     idObjeto = null,
   }) => {
-    debugger;
     try {
       let url = null;
       if (method === "PUT" && (idObjeto || idObjeto === 0)) {

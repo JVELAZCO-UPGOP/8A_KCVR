@@ -2,7 +2,70 @@ import React, { Component } from "react";
 import ActionsMenu from "./componentes/ActionsMenu";
 import Tabla from "./componentes/Tabla";
 import Modal from "./componentes/Modal";
+import Input from "./componentes/Input";
+import Select from "./componentes/Select";
 import { listarEntidad, crearEditarEntidad, eliminarEntidad } from "./servicio";
+
+const tiposMascota = [
+  { valor: "Perro", etiqueta: "Perro" },
+  { valor: "Gato", etiqueta: "Gato" },
+  { valor: "Pájaro", etiqueta: "Pájaro" },
+  { valor: "Otro", etiqueta: "Otro" },
+];
+
+const duenos = [
+  { valor: "Esteban", etiqueta: "Esteban" },
+  { valor: "Julián", etiqueta: "Julián" },
+  { valor: "Jhon", etiqueta: "Jhon" },
+  { valor: "Felix", etiqueta: "Felix" },
+  { valor: "Camilo", etiqueta: "Camilo" },
+];
+
+const ComponentCampo = ({
+  manejarInput = () => {},
+  objeto = {},
+  nombreCampo = "",
+  options = [],
+}) => {
+  switch (nombreCampo) {
+    case "tipo":
+    case "mascota":
+    case "veterinaria":
+    case "diagnostico":
+    case "dueno":
+      return (
+        <div className="col">
+          <Select
+            nombreCampo={nombreCampo}
+            options={options}
+            onChange={manejarInput}
+            placeholder={nombreCampo}
+            value={objeto[nombreCampo]}
+          />
+        </div>
+      );
+
+    case "nombre":
+
+    case "apellido":
+    case "documento":
+    case "historia":
+      return (
+        <div className="col">
+          <Input
+            nombreCampo={nombreCampo}
+            tipo="text"
+            onInput={manejarInput}
+            placeholder={nombreCampo}
+            value={objeto[nombreCampo]}
+          />
+        </div>
+      );
+    default:
+      return false;
+  }
+};
+
 class Pagina extends Component {
   constructor(props) {
     super(props);
@@ -12,6 +75,7 @@ class Pagina extends Component {
       objeto: {},
       idObjeto: null,
       method: "POST",
+      columnas: [],
     };
   }
   cambiarModal = (_evento, method = "POST") => {
@@ -20,7 +84,11 @@ class Pagina extends Component {
   listar = async () => {
     const { entidad } = this.props;
     const entidades = await listarEntidad({ entidad });
-    this.setState({ entidades });
+    let columnas = [];
+    if (Array.isArray(entidades) && entidades.length > 0) {
+      columnas = Object.keys(entidades[0]) || [];
+    }
+    this.setState({ entidades, columnas });
   };
   manejarInput = (evento) => {
     const {
@@ -56,6 +124,8 @@ class Pagina extends Component {
   // el método render siempre debe ir de último
   render() {
     const { titulo = "Página sin título" } = this.props;
+    const { columnas } = this.state;
+    console.log({ titulo, columnas });
     return (
       <>
         
@@ -64,6 +134,7 @@ class Pagina extends Component {
           entidades={this.state.entidades}
           editarEntidad={this.editarEntidad}
           eliminarEntidad={this.eliminarEntidad}
+          columnas={columnas}
         />
         {this.state.mostraModal && (
           <Modal
@@ -71,7 +142,17 @@ class Pagina extends Component {
             manejarInput={this.manejarInput}
             crearEntidad={this.crearEntidad}
             objeto={this.state.objeto}
-          />
+            >
+           {columnas.map((columna, index) => (
+              <ComponentCampo
+                key={index}
+                manejarInput={this.manejarInput}
+                objeto={this.state.objeto}
+                nombreCampo={columna}
+                options={columna === "tipo" ? tiposMascota : duenos}
+              />
+            ))}
+          </Modal>
           
         )}
       </>
