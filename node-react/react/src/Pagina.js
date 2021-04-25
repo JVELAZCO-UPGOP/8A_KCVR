@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ActionsMenu from "./componentes/ActionsMenu";
 import Tabla from "./componentes/Tabla";
 import Modal from "./componentes/Modal";
+
 import {
   listarEntidad,
   crearEditarEntidad,
@@ -40,6 +41,8 @@ class Pagina extends Component {
       columnas: [],
       options: opcionesIniciales,
       search: "",
+      veterinaria: "",
+      mascota: "",
     };
   }
   cambiarModal = (_evento, method = "POST", newState = {}) => {
@@ -59,13 +62,19 @@ class Pagina extends Component {
       _evento.preventDefault();
     }
     const { entidad } = this.props;
-    const { search } = this.state;
-    const entidades = await listarEntidad({ entidad, search });
-    let columnas = [];
+    const { search, columnas, veterinaria, mascota } = this.state;
+    const entidades = await listarEntidad({
+      entidad,
+      search,
+      columnas,
+      veterinaria,
+      mascota,
+    });
+    let _columnas = [];
     if (Array.isArray(entidades) && entidades.length > 0) {
-      columnas = Object.keys(entidades[0]) || [];
+      _columnas = Object.keys(entidades[0]) || [];
     }
-    this.setState({ entidades, columnas });
+    this.setState({ entidades, columnas: _columnas });
   };
   manejarInput = (evento) => {
     const {
@@ -123,14 +132,18 @@ class Pagina extends Component {
 
   manejarSearchInput = (evento) => {
     const {
-      target: { value },
+      target: { value, name },
     } = evento;
-    let { search } = this.state;
-    search = value;
-    this.setState({ search });
+    console.log({ value, name });
+    this.setState({ [name]: value });
   };
 
   componentDidMount() {
+    const { entidad } = this.props;
+    if (entidad === "consultas") {
+      this.obtenerOpcionesBackend({});
+      return;
+    }
     this.listar();
   }
   // codigo del componente
@@ -147,6 +160,8 @@ class Pagina extends Component {
           titulo={titulo}
           manejarSearchInput={this.manejarSearchInput}
           buscar={this.listar}
+          entidad={entidad}
+          options={options}
         />
         <Tabla
           entidades={entidades}
