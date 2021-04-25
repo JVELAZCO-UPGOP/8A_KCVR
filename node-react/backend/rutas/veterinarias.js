@@ -1,3 +1,5 @@
+const { palabraSinAcentos } = require("../util");
+
 module.exports = function veterinariasHandler(veterinarias){
     return   {
     get: (data, callback) => {
@@ -11,9 +13,7 @@ module.exports = function veterinariasHandler(veterinarias){
  
       if (
         data.query &&
-        (typeof data.query.nombre !== "undefined" ||
-          data.query.apellido !== "undefined" ||
-          data.query.documento !== "undefined")
+        (data.query.nombre || data.query.apellido || data.query.documento)
       ) {
       
         const llavesQuery = Object.keys(data.query);
@@ -22,20 +22,30 @@ module.exports = function veterinariasHandler(veterinarias){
         let respuestaVeterinarias = [...veterinarias];
 
        
-        for (const llave of llavesQuery) {
-     
-          respuestaVeterinarias = respuestaVeterinarias.filter(
-            (_veterinaria) => {
-          
-              const expresionRegular = new RegExp(data.query[llave], "ig");
+       respuestaVeterinarias = respuestaVeterinarias.filter((_veterinaria) => {
+      
+        let resultado = false;
 
-              const resultado = _veterinaria[llave].match(expresionRegular);
+        for (const llave of llavesQuery) {
+          
+          const busqueda = palabraSinAcentos(data.query[llave]);
+          
+          const expresionRegular = new RegExp(busqueda, "ig");
+
+          const campoVeterinariaSinAcentos = palabraSinAcentos(
+            _veterinaria[llave]
+          );
 
               
-              return resultado;
+            resultado = campoVeterinariaSinAcentos.match(expresionRegular);
+
+            if (resultado) {
+              break;
             }
-          );
-        }
+          }
+
+          return resultado;
+        });
         return callback(200, respuestaVeterinarias);
       }
       callback(200, veterinarias);
