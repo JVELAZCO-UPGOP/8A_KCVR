@@ -8,6 +8,36 @@ module.exports = function veterinariasHandler(veterinarias){
         }
         return callback(404, {mensaje: "La veterinaria con indice ${data.indice} no encontrada",});
       }
+ 
+      if (
+        data.query &&
+        (typeof data.query.nombre !== "undefined" ||
+          data.query.apellido !== "undefined" ||
+          data.query.documento !== "undefined")
+      ) {
+      
+        const llavesQuery = Object.keys(data.query);
+
+       
+        let respuestaVeterinarias = [...veterinarias];
+
+       
+        for (const llave of llavesQuery) {
+     
+          respuestaVeterinarias = respuestaVeterinarias.filter(
+            (_veterinaria) => {
+          
+              const expresionRegular = new RegExp(data.query[llave], "ig");
+
+              const resultado = _veterinaria[llave].match(expresionRegular);
+
+              
+              return resultado;
+            }
+          );
+        }
+        return callback(200, respuestaVeterinarias);
+      }
       callback(200, veterinarias);
     },
     post: (data, callback) => {
